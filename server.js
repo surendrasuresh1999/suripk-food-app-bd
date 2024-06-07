@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 
 const foodRoute = require("./Routes/foodRoutes");
+const blogRoute = require("./Routes/blogRoutes");
+const userRoute = require("./Routes/userRoutes");
 
 // initialize the application
 const app = express();
@@ -20,6 +22,8 @@ app.use((req, res, next) => {
 
 // define all routes here
 app.use("/api/food", foodRoute);
+app.use("/api/blog", blogRoute);
+app.use("/api/user", userRoute);
 
 // connect to db
 // mongoose

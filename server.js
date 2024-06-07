@@ -2,6 +2,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 
+const foodRoute = require("./Routes/foodRoutes");
+
 // initialize the application
 const app = express();
 
@@ -13,14 +15,11 @@ app.use(express.json());
 
 // Authentication middleware
 app.use((req, res, next) => {
-    next();
-})
+  next();
+});
 
 // define all routes here
-app.use("/",(req, res) => {
-    res.send("Welcome to foodie app")
-})
-
+app.use("/api/food", foodRoute);
 
 // connect to db
 // mongoose
@@ -37,10 +36,6 @@ app.use("/",(req, res) => {
 //   });
 
 // connecting the application here
-app.listen(3000,()=>{
-    console.log('listening on port 3000');
-})
-
-
-
-
+app.listen(3000, () => {
+  console.log("listening on port 3000");
+});

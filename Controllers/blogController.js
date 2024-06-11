@@ -1,6 +1,5 @@
 const blogModel = require("../Models/blogModel");
 const userModel = require("../Models/userModel");
-const commentsModel = require("../Models/commentsModel");
 const mongoose = require("mongoose");
 
 // get all blog posts

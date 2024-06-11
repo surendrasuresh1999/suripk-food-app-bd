@@ -1,11 +1,12 @@
 const User = require("../Models/userModel");
+const cart = require("../Models/cartModel");
 const blogModel = require("../Models/blogModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const createJwtToken = (userId) => {
   return jwt.sign({ _id: userId }, process.env.SECRET_STRING, {
-    expiresIn: "3d",
+    expiresIn: 120,
   });
 };
 
@@ -60,6 +61,12 @@ const createNewUser = async (req, res) => {
       name,
       email,
       password: hashedPassword,
+    });
+
+    await cart.create({
+      user: newUser._id,
+      foodItems: [], // Initially an empty array of food items
+      totalPrice: 0, // Initially set to 0
     });
     const token = createJwtToken(newUser._id);
     res.json({ status: true, message: "User created successfully", token });

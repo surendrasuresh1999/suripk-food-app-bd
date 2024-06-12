@@ -44,8 +44,12 @@ const deleteFoodItem = async (req, res) => {
 const getFoodItems = async (req, res) => {
   // const { _id } = req.user;
   try {
-    const foodItems = await recipeModel.find({ user: _id });
-    return res.json({ status: 200, messages: foodItems });
+    const foodItems = await recipeModel.find();
+    return res.json({
+      status: 200,
+      messages: "Successfully fetched receipes",
+      foodItems,
+    });
   } catch (error) {
     return res.json({ status: 401, messages: error.messages });
   }

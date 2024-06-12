@@ -7,6 +7,7 @@ const cors = require("cors");
 const foodRoute = require("./Routes/foodRoutes");
 const blogRoute = require("./Routes/blogRoutes");
 const userRoute = require("./Routes/userRoutes");
+const cartRoute = require("./Routes/cartRoutes");
 
 // initialize the application
 const app = express();
@@ -26,6 +27,7 @@ app.use((req, res, next) => {
 app.use("/api/food", foodRoute);
 app.use("/api/blog", blogRoute);
 app.use("/api/user", userRoute);
+app.use("/api/cart", cartRoute);
 
 // connect to db
 mongoose

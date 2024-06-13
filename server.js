@@ -8,6 +8,8 @@ const foodRoute = require("./Routes/foodRoutes");
 const blogRoute = require("./Routes/blogRoutes");
 const userRoute = require("./Routes/userRoutes");
 const cartRoute = require("./Routes/cartRoutes");
+const subscribeRoute = require("./Routes/subScribeRoutes");
+const addressRoute = require("./Routes/addressRoutes");
 
 // initialize the application
 const app = express();
@@ -28,6 +30,8 @@ app.use("/api/food", foodRoute);
 app.use("/api/blog", blogRoute);
 app.use("/api/user", userRoute);
 app.use("/api/cart", cartRoute);
+app.use("/api/subscribe", subscribeRoute);
+app.use("/api/address", addressRoute);
 
 // connect to db
 mongoose

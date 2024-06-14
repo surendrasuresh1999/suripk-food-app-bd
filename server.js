@@ -10,6 +10,7 @@ const userRoute = require("./Routes/userRoutes");
 const cartRoute = require("./Routes/cartRoutes");
 const subscribeRoute = require("./Routes/subScribeRoutes");
 const addressRoute = require("./Routes/addressRoutes");
+const serviceRoutes = require("./Routes/servicesRoutes");
 
 // initialize the application
 const app = express();
@@ -32,6 +33,7 @@ app.use("/api/user", userRoute);
 app.use("/api/cart", cartRoute);
 app.use("/api/subscribe", subscribeRoute);
 app.use("/api/address", addressRoute);
+app.use("/api/service", serviceRoutes);
 
 // connect to db
 mongoose

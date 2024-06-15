@@ -1,5 +1,4 @@
 require("dotenv").config();
-
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -11,6 +10,8 @@ const cartRoute = require("./Routes/cartRoutes");
 const subscribeRoute = require("./Routes/subScribeRoutes");
 const addressRoute = require("./Routes/addressRoutes");
 const serviceRoutes = require("./Routes/servicesRoutes");
+const paymentRoutes = require("./Routes/paymentRoutes");
+const orderRoutes = require("./Routes/orderRoutes");
 
 // initialize the application
 const app = express();
@@ -34,6 +35,15 @@ app.use("/api/cart", cartRoute);
 app.use("/api/subscribe", subscribeRoute);
 app.use("/api/address", addressRoute);
 app.use("/api/service", serviceRoutes);
+app.use("/api", paymentRoutes);
+app.use("/api/orders", orderRoutes);
+
+app.get("/api/getKey", (req, res) => {
+  return res.json({
+    status: true,
+    keyString: process.env.RAZOR_PAY_KEY,
+  });
+});
 
 // connect to db
 mongoose

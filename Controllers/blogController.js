@@ -6,26 +6,15 @@ const mongoose = require("mongoose");
 const getAllBlogPosts = async (req, res) => {
   const { _id } = req.user;
   try {
-    // Fetch all users
-    const allUsers = await userModel.find({});
-
-    // Fetch all blog posts
-    const blogPosts = await blogModel.find({});
-
-    // Populate the user field for each blog post with corresponding user info
-    const populatedBlogPosts = blogPosts.map((blogPost) => {
-      const userId = blogPost.user;
-      const userInfo = allUsers.find(
-        (user) => user._id.toString() === userId.toString()
-      );
-      const userName = userInfo ? userInfo.name : ""; // If userInfo is null, assign empty string
-      return { ...blogPost._doc, user: userName }; // Assign userName to the user field
-    });
-
+    const user = await userModel.findById({ _id: _id.toString() });
+    if (!user) {
+      return res.json({ status: 404, message: "User not found" });
+    }
+    const blogs = await blogModel.find();
     res.json({
       status: 200,
       message: "Fetching all blogs",
-      posts: populatedBlogPosts,
+      blogs,
     });
   } catch (error) {
     console.log("Error: ", error.message);
@@ -35,19 +24,18 @@ const getAllBlogPosts = async (req, res) => {
 
 // get all blog posts
 const getBlogPostById = async (req, res) => {
+  const { _id } = req.user;
   try {
-    const blogPost = await blogModel.findById({ _id: req.params.id });
-    const comments = await commentsModel.find({ blogId: req.params.id });
-    for (let i = 0; i < comments.length; i++) {
-      const user = await userModel.findById(comments[i].userId.toString());
-      comments[i].userId = user;
+    const user = await userModel.findById({ _id: _id.toString() });
+    if (!user) {
+      return res.json({ status: 404, message: "User not found" });
     }
-    const user = await userModel.findById({ _id: blogPost.user });
-    const singlePost = { ...blogPost._doc, user: user.name, comments };
+
+    const blogPost = await blogModel.findById({ _id: req.params.id });
     res.json({
       status: 200,
       message: "Fetched blog post by id",
-      posts: singlePost,
+      blogPost,
     });
   } catch (error) {
     console.log("Error: ", error.message);
@@ -57,15 +45,13 @@ const getBlogPostById = async (req, res) => {
 
 // create a new blog post
 const createBlogPost = async (req, res) => {
-  const { _id } = req.user;
+  // const { _id } = req.user;
   try {
-    const resultBlogPost = await blogModel.create({
-      user: _id.toString(),
+    await blogModel.create({
       ...req.body,
     });
     res.json({
       message: "Blog created Successfully",
-      resultBlogPost,
       status: 200,
     });
   } catch (error) {

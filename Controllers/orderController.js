@@ -16,4 +16,29 @@ const getUserAllOrders = async (req, res) => {
     return res.json({ status: 401, message: error.message });
   }
 };
-module.exports = { getUserAllOrders };
+
+const updateOrder = async (req, res) => {
+  const { _id } = req.user;
+  const { status } = req.body;
+  try {
+    const order = await orderModel.findOne({
+      _id: req.params.id,
+      user: _id.toString(),
+    });
+    if (!order) {
+      return res.json({ status: 404, message: "Order not found" });
+    }
+    await orderModel.findByIdAndUpdate(
+      {
+        _id: req.params.id,
+        user: _id.toString(),
+      },
+      { status: status }
+    );
+
+    return res.json({ status: true, message: "Order updated successfully" });
+  } catch (error) {
+    return res.json({ status: 404, message: error.message });
+  }
+};
+module.exports = { getUserAllOrders, updateOrder };

@@ -71,9 +71,17 @@ const paymentVerification = async (req, res) => {
     });
 
     await newOrder.save();
-    await cartModel.updateMany({
-      $set: { foodItems: [] },
-    });
+
+    const userCart = await cartModel.findOne({ user: _id.toString() });
+    if (!userCart) {
+      return res.json({ status: 404, message: "User cart not found" });
+    }
+    // Update cart document
+    userCart.foodItems = [];
+    userCart.totalPrice = 0;
+
+    await userCart.save();
+
     return res.json({ status: true, message: "Payment successful" });
   } catch (error) {
     return res.json({ status: 400, message: error.message });

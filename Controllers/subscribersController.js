@@ -3,7 +3,6 @@ const userModel = require("../Models/userModel");
 
 const createNewSubscriber = async (req, res) => {
   const { _id } = req.user;
-  console.log(req.body);
   try {
     const isUserExist = await userModel.findById({ _id: _id.toString() });
     if (!isUserExist) {

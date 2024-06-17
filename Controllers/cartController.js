@@ -78,7 +78,7 @@ const deleteItemFromCart = async (req, res) => {
     const isItemExist = userCart.foodItems.find(
       (item) => item._id.toString() === req.params.id
     );
-    console.log(isItemExist);
+    // console.log(isItemExist);
     if (!isItemExist) {
       return res.json({ status: 404, message: "Food item not found" });
     }

@@ -8,7 +8,9 @@ const getUserAllOrders = async (req, res) => {
     if (!isUserExist) {
       return res.json({ status: 401, message: "User does not exist" });
     }
-    const orders = await orderModel.find({ user: _id.toString() });
+    const orders = await orderModel
+      .find({ user: _id.toString() })
+      .sort({ createdAt: -1 });
     return res.json({ status: true, orders });
   } catch (error) {
     return res.json({ status: 401, message: error.message });

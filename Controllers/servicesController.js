@@ -2,7 +2,7 @@ const servicesModel = require("../Models/servicesModel");
 
 const createService = async (req, res) => {
   const { _id } = req.user;
-  //   console.log(req.body);
+  // console.log(req.body);
   try {
     await servicesModel.create({
       user: _id,
@@ -10,7 +10,7 @@ const createService = async (req, res) => {
     });
     return res.json({
       status: true,
-      message: "Thanks for booking out service",
+      message: "Thanks for booking our service",
     });
   } catch (error) {
     return res.json({ status: 404, message: error.message });

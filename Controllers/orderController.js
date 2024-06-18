@@ -1,5 +1,6 @@
 const user = require("../Models/userModel");
 const orderModel = require("../Models/ordersModel");
+const recipeModel = require("../Models/foodItemModel");
 
 const getUserAllOrders = async (req, res) => {
   const { _id } = req.user;
@@ -17,6 +18,7 @@ const getUserAllOrders = async (req, res) => {
   }
 };
 
+// update order item information
 const updateOrder = async (req, res) => {
   const { _id } = req.user;
   const { status } = req.body;
@@ -41,4 +43,36 @@ const updateOrder = async (req, res) => {
     return res.json({ status: 404, message: error.message });
   }
 };
-module.exports = { getUserAllOrders, updateOrder };
+
+// drop rating
+const dropRatingForFoodItem = async (req, res) => {
+  const { _id } = req.user;
+  const { rating } = req.body;
+  const { itemId, orderId } = req.params;
+  try {
+    const isOderExist = await orderModel.findById({ _id: orderId });
+    if (!isOderExist) {
+      return res.json({ status: 404, message: "Order not found" });
+    }
+
+    const isFoodExist = await recipeModel.findById({ _id: itemId });
+    if (!isFoodExist) {
+      return res.json({ status: 404, message: "food not found" });
+    }
+
+    isOderExist.ratingArr.push({
+      user: _id.toString(),
+      value: rating,
+      foodId: itemId,
+      orderId,
+    });
+
+    await isOderExist.save();
+
+    return res.json({ status: true, message: "Thanks for adding your rating" });
+  } catch (error) {
+    return res.json({ status: 401, message: error.message });
+  }
+};
+
+module.exports = { getUserAllOrders, updateOrder, dropRatingForFoodItem };

@@ -1,4 +1,5 @@
 const recipeModel = require("../Models/foodItemModel");
+const userModel = require("../Models/userModel");
 const mongoose = require("mongoose");
 
 // create a food item
@@ -55,17 +56,8 @@ const getFoodItems = async (req, res) => {
   }
 };
 
-// update food item information
-// const updateFoodItemInfo = async (req, res) => {
-//   const { _id } = req.user;
-//   try {
-//     return res.js
-//   } catch (error) {}
-// };
-
 module.exports = {
   createFoodItem,
   deleteFoodItem,
   getFoodItems,
-  // updateFoodItemInfo,
 };

@@ -9,6 +9,7 @@ const orderSchema = new Schema(
     paymentInfo: {},
     totalAmount: { type: Number, required: true },
     status: { type: String, required: true },
+    ratingArr: [],
   },
   { timestamps: true }
 );

@@ -17,4 +17,18 @@ const createService = async (req, res) => {
   }
 };
 
-module.exports = { createService };
+const getAllUserService = async (req, res) => {
+  const { _id } = req.user;
+  try {
+    const services = await servicesModel.find({ user: _id.toString() });
+    return res.json({
+      status: true,
+      services,
+      message: "Fetching all user services",
+    });
+  } catch (error) {
+    return res.json({ status: 404, message: error.message });
+  }
+};
+
+module.exports = { createService, getAllUserService };

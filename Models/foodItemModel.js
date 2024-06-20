@@ -9,7 +9,6 @@ const recipeSchema = new schema(
     imageUrl: { type: String, required: true },
     discription: { type: String, required: true },
     price: { type: Number, required: true },
-    rating: [],
   },
   { timestamps: true }
 );

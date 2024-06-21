@@ -1,6 +1,7 @@
 const user = require("../Models/userModel");
 const orderModel = require("../Models/ordersModel");
 const recipeModel = require("../Models/foodItemModel");
+const ratingModel = require("../Models/ratingModel");
 
 const getUserAllOrders = async (req, res) => {
   const { _id } = req.user;
@@ -18,14 +19,13 @@ const getUserAllOrders = async (req, res) => {
   }
 };
 
-// update order item information
+// admin purpose update order status
 const updateOrder = async (req, res) => {
   const { _id } = req.user;
-  const { status } = req.body;
+  const { statusText } = req.body;
   try {
     const order = await orderModel.findOne({
       _id: req.params.id,
-      user: _id.toString(),
     });
     if (!order) {
       return res.json({ status: 404, message: "Order not found" });
@@ -33,12 +33,14 @@ const updateOrder = async (req, res) => {
     await orderModel.findByIdAndUpdate(
       {
         _id: req.params.id,
-        user: _id.toString(),
       },
-      { status: status }
+      { status: statusText }
     );
 
-    return res.json({ status: true, message: "Order updated successfully" });
+    return res.json({
+      status: true,
+      message: "Order status changed successfully",
+    });
   } catch (error) {
     return res.json({ status: 404, message: error.message });
   }
@@ -49,8 +51,12 @@ const dropRatingForFoodItem = async (req, res) => {
   const { _id } = req.user;
   const { rating } = req.body;
   const { itemId, orderId } = req.params;
+
   try {
-    const isOderExist = await orderModel.findById({ _id: orderId });
+    const isOderExist = await orderModel.findById({
+      orderId: orderId,
+      user: _id.toString(),
+    });
     if (!isOderExist) {
       return res.json({ status: 404, message: "Order not found" });
     }
@@ -60,16 +66,18 @@ const dropRatingForFoodItem = async (req, res) => {
       return res.json({ status: 404, message: "food not found" });
     }
 
-    isOderExist.ratingArr.push({
-      user: _id.toString(),
-      value: rating,
-      foodId: itemId,
-      orderId,
-    });
-
-    await isOderExist.save();
-
-    return res.json({ status: true, message: "Thanks for adding your rating" });
+    let ratings = [];
+    if (isFoodExist && isOderExist && _id.toString()) {
+      await ratingModel.create({
+        user: _id.toString(),
+        orderId: orderId,
+        ratings: ratings.push({ foodId: itemId, value: rating }),
+      });
+      return res.json({
+        status: true,
+        message: "Thanks for adding your rating",
+      });
+    }
   } catch (error) {
     return res.json({ status: 401, message: error.message });
   }

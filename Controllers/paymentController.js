@@ -67,7 +67,7 @@ const paymentVerification = async (req, res) => {
         paymentId: razorpay_payment_id,
       },
       totalAmount: totalAmount / 100,
-      status: "Preparing",
+      status: "Pending",
     });
 
     await newOrder.save();

@@ -5,10 +5,11 @@ const mongoose = require("mongoose");
 // create a food item
 const createFoodItem = async (req, res) => {
   // const { _id } = req.user;
+  console.log(req.body);
   try {
     const foodItem = await recipeModel.create({
       // user: _id.toString(),
-      ...req.body,
+      ...req.body.foddData,
     });
 
     res.json({
@@ -35,7 +36,7 @@ const deleteFoodItem = async (req, res) => {
     }
 
     await recipeModel.findByIdAndDelete(req.params.id);
-    return res.json({ status: 200, message: "Food item deleted" });
+    return res.json({ status: true, message: "Food item deleted" });
   } catch (error) {
     return res.json({ status: 401, message: error.message });
   }
@@ -45,7 +46,7 @@ const deleteFoodItem = async (req, res) => {
 const getFoodItems = async (req, res) => {
   // const { _id } = req.user;
   try {
-    const foodItems = await recipeModel.find();
+    const foodItems = await recipeModel.find().sort({createdAt:-1});
     return res.json({
       status: 200,
       messages: "Successfully fetched receipes",

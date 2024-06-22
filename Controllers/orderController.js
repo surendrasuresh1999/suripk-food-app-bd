@@ -13,6 +13,18 @@ const getUserAllOrders = async (req, res) => {
     const orders = await orderModel
       .find({ user: _id.toString() })
       .sort({ createdAt: -1 });
+
+    for (let order of orders) {
+      let userOrderRating = await ratingModel.findOne({
+        orderId: order._id.toString(),
+        user: _id,
+      });
+      if (!userOrderRating) {
+        order.ratingArr = [];
+      } else {
+        order.ratingArr = userOrderRating?.ratings;
+      }
+    }
     return res.json({ status: true, orders });
   } catch (error) {
     return res.json({ status: 401, message: error.message });
@@ -53,10 +65,11 @@ const dropRatingForFoodItem = async (req, res) => {
   const { itemId, orderId } = req.params;
 
   try {
-    const isOderExist = await orderModel.findById({
-      orderId: orderId,
+    const isOderExist = await orderModel.findOne({
+      _id: orderId,
       user: _id.toString(),
     });
+
     if (!isOderExist) {
       return res.json({ status: 404, message: "Order not found" });
     }
@@ -66,17 +79,31 @@ const dropRatingForFoodItem = async (req, res) => {
       return res.json({ status: 404, message: "food not found" });
     }
 
-    let ratings = [];
     if (isFoodExist && isOderExist && _id.toString()) {
-      await ratingModel.create({
+      isUserOrderExistInRating = await ratingModel.findOne({
         user: _id.toString(),
         orderId: orderId,
-        ratings: ratings.push({ foodId: itemId, value: rating }),
       });
-      return res.json({
-        status: true,
-        message: "Thanks for adding your rating",
-      });
+      if (!isUserOrderExistInRating) {
+        await ratingModel.create({
+          user: _id.toString(),
+          orderId: orderId,
+          ratings: [{ foodId: itemId, value: rating }],
+        });
+        return res.json({
+          status: true,
+          message: "Thanks for your rating",
+        });
+      } else {
+        await ratingModel.findOneAndUpdate(
+          { user: _id.toString(), orderId: orderId },
+          { $push: { ratings: { foodId: itemId, value: rating } } }
+        );
+        return res.json({
+          status: true,
+          message: "Thanks for your rating",
+        });
+      }
     }
   } catch (error) {
     return res.json({ status: 401, message: error.message });

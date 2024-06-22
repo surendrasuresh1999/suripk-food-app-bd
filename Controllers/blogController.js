@@ -33,7 +33,7 @@ const getBlogPostById = async (req, res) => {
 
     const blogPost = await blogModel.findById({ _id: req.params.id });
     res.json({
-      status: 200,
+      status: true,
       message: "Fetched blog post by id",
       blogPost,
     });
@@ -52,7 +52,7 @@ const createBlogPost = async (req, res) => {
     });
     res.json({
       message: "Blog created Successfully",
-      status: 200,
+      status: true,
     });
   } catch (error) {
     console.log("Error: ", error.message);
@@ -102,18 +102,18 @@ const dropLikeForPost = async (req, res) => {
     if (isUserExist) {
       blogObj.likedUsers.pull(_id);
       await blogObj.save();
-      return res.json({ status: 200, message: "You have removed your like" });
+      return res.json({ status: true, message: "You have removed your like" });
     } else {
       blogObj.likedUsers.push(_id);
       await blogObj.save();
       return res.json({
-        status: 200,
+        status: true,
         message: "You have added your opinion",
       });
     }
   } catch (error) {
     console.log("Error: ", error);
-    res.json({ error: error.message, status: error.status });
+    res.json({ error: error.message, status: 400 });
   }
 };
 

@@ -6,6 +6,7 @@ const {
   deleteBlogPost,
   getBlogPostById,
   dropLikeForPost,
+  updateBlogPost,
 } = require("../Controllers/blogController");
 
 const requiredAuth = require("../Middleware/AuthmiddleWare");
@@ -28,5 +29,8 @@ router.get("/:id", getBlogPostById);
 
 // get blogPost by id
 router.put("/:id", dropLikeForPost);
+
+// get blogPost by id
+router.put("/update/:id", updateBlogPost);
 
 module.exports = router;

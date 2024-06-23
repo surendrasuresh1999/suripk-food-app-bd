@@ -117,10 +117,26 @@ const dropLikeForPost = async (req, res) => {
   }
 };
 
+const updateBlogPost = async (req, res) => {
+  const { _id } = req.user;
+
+  try {
+    const isBlogExist = await blogModel.findById(req.params.id);
+    if (!isBlogExist) {
+      return res.json({ status: 404, message: "Blog not found" });
+    }
+    await blogModel.findByIdAndUpdate(req.params.id, req.body);
+    return res.json({ status: true, message: "Blog update successful" });
+  } catch (error) {
+    return res.json({ message: error.message, status: 404 });
+  }
+};
+
 module.exports = {
   getAllBlogPosts,
   createBlogPost,
   deleteBlogPost,
   getBlogPostById,
   dropLikeForPost,
+  updateBlogPost,
 };

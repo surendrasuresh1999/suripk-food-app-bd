@@ -10,6 +10,7 @@ const createNewSubscriber = async (req, res) => {
     }
     await subScriberModel.create({
       email: req.body.email,
+      name: req.body.name,
     });
     return res.json({
       status: true,
@@ -20,4 +21,18 @@ const createNewSubscriber = async (req, res) => {
   }
 };
 
-module.exports = { createNewSubscriber };
+const getAllSubscribers = async (req, res) => {
+  // const { _id } = req.user;
+  try {
+    const subscribers = await subScriberModel.find();
+    return res.json({
+      status: true,
+      message: "Thanks for subscribing our website",
+      subscribers,
+    });
+  } catch (error) {
+    return res.json({ status: 404, error: error.message });
+  }
+};
+
+module.exports = { createNewSubscriber, getAllSubscribers };

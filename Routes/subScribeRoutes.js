@@ -1,6 +1,6 @@
 const express = require("express");
 
-const { createNewSubscriber } = require("../Controllers/subscribersController");
+const { createNewSubscriber, getAllSubscribers } = require("../Controllers/subscribersController");
 
 const requiredAuth = require("../Middleware/AuthmiddleWare");
 
@@ -10,5 +10,6 @@ router.use(requiredAuth);
 
 // create a new subscriber
 router.post("/", createNewSubscriber);
+router.get("/", getAllSubscribers);
 
 module.exports = router;

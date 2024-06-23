@@ -5,6 +5,7 @@ const Schema = mongoose.Schema;
 const subscriberSchema = new Schema(
   {
     email: { type: String, required: true },
+    name: { type: String, required: true },
   },
   { timestamps: true }
 );

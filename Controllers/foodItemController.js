@@ -5,11 +5,11 @@ const mongoose = require("mongoose");
 // create a food item
 const createFoodItem = async (req, res) => {
   // const { _id } = req.user;
-  console.log(req.body);
+  // console.log(req.body);
   try {
     const foodItem = await recipeModel.create({
       // user: _id.toString(),
-      ...req.body.foddData,
+      ...req.body,
     });
 
     res.json({
@@ -46,7 +46,7 @@ const deleteFoodItem = async (req, res) => {
 const getFoodItems = async (req, res) => {
   // const { _id } = req.user;
   try {
-    const foodItems = await recipeModel.find().sort({createdAt:-1});
+    const foodItems = await recipeModel.find().sort({ createdAt: -1 });
     return res.json({
       status: 200,
       messages: "Successfully fetched receipes",
@@ -57,8 +57,26 @@ const getFoodItems = async (req, res) => {
   }
 };
 
+const updateFoodItem = async (req, res) => {
+  const { _id } = req.user;
+  try {
+    isFoodExist = await recipeModel.findById(req.params.id);
+    if (!isFoodExist) {
+      return res.json({ status: 404, message: "food item not found" });
+    }
+    await recipeModel.findByIdAndUpdate(req.params.id, req.body);
+    return res.json({
+      status: true,
+      message: "food item updated successfully!",
+    });
+  } catch (error) {
+    return res.json({ status: 404, message: error.message });
+  }
+};
+
 module.exports = {
   createFoodItem,
   deleteFoodItem,
   getFoodItems,
+  updateFoodItem,
 };

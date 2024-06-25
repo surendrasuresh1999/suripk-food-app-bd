@@ -27,7 +27,7 @@ const getAllSubscribers = async (req, res) => {
     const subscribers = await subScriberModel.find();
     return res.json({
       status: true,
-      message: "Thanks for subscribing our website",
+      message: "Fetching all subscribers",
       subscribers,
     });
   } catch (error) {

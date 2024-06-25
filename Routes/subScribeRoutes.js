@@ -9,7 +9,7 @@ const router = express.Router();
 router.use(requiredAuth);
 
 // create a new subscriber
-router.post("/", createNewSubscriber);
 router.get("/", getAllSubscribers);
+router.post("/", createNewSubscriber);
 
 module.exports = router;

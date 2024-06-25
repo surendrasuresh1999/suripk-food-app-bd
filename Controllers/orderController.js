@@ -14,6 +14,7 @@ const getUserAllOrders = async (req, res) => {
       .find({ user: _id.toString() })
       .sort({ createdAt: -1 });
 
+    console.log(orders);
     for (let order of orders) {
       let userOrderRating = await ratingModel.findOne({
         orderId: order._id.toString(),

@@ -12,6 +12,7 @@ const addressRoute = require("./Routes/addressRoutes");
 const serviceRoutes = require("./Routes/servicesRoutes");
 const paymentRoutes = require("./Routes/paymentRoutes");
 const orderRoutes = require("./Routes/orderRoutes");
+const dashboardRoutes = require("./Routes/dashboardRoute");
 
 // initialize the application
 const app = express();
@@ -28,6 +29,7 @@ app.use((req, res, next) => {
 });
 
 // define all routes here
+app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/food", foodRoute);
 app.use("/api/blog", blogRoute);
 app.use("/api/user", userRoute);

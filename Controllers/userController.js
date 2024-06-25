@@ -14,12 +14,13 @@ const createJwtToken = (userId) => {
 const getAllUsers = async (req, res) => {
   try {
     const users = await User.find({}).sort({ createdAt: -1 });
+    console.log(users);
     if (users.length < 0) {
       return res.json({ error: "No users found", status: false });
     }
-    res.status(200).json(users);
+    res.json({ status: true, users, message: "Fetching all users" });
   } catch (error) {
-    res.status(500).json(error.message);
+    res.json({ status: 404, message: error.message });
   }
 };
 

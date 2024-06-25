@@ -70,9 +70,13 @@ const createNewUser = async (req, res) => {
       totalPrice: 0, // Initially set to 0
     });
     const token = createJwtToken(newUser._id);
-    res.json({ status: true, message: "User created successfully", token });
+    return res.json({
+      status: true,
+      message: "User created successfully",
+      token,
+    });
   } catch (error) {
-    res.json({ error: error.message, status: false });
+    return res.json({ error: error.message, status: false });
   }
 };
 

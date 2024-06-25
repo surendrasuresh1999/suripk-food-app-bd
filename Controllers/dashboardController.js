@@ -6,6 +6,7 @@ const {
   sendUsersFullData,
   sendItemsFullData,
   generateOrdersYearChartData,
+  generateUsersYearChartData,
 } = require("../Services/dashbordSevice");
 
 const getFullDashBoardData = async (req, res) => {
@@ -25,6 +26,7 @@ const getFullDashBoardData = async (req, res) => {
         sendItemsFullData(items),
       ],
       ordersChartData: generateOrdersYearChartData(orders),
+      usersChartData: generateUsersYearChartData(users),
     });
   } catch (error) {
     return res.json({ status: 404, message: error.message });

@@ -163,10 +163,10 @@ const sendItemsFullData = (items) => {
 };
 
 const generateOrdersYearChartData = (orders) => {
-  const monthNamesShort = moment.monthsShort();
   // Initialize yearData array for 12 months, starting from January (month 0) to December (month 11)
   const yearData = Array.from({ length: 12 }, (_, month) => ({
-    month: monthNamesShort[month],
+    year: moment().year(), // Get the current year
+    month: moment().month(month).format("MMM"), // Short month name (Jan, Feb, ..., Dec)
     count: 0,
   }));
 
@@ -179,9 +179,26 @@ const generateOrdersYearChartData = (orders) => {
   return yearData;
 };
 
+const generateUsersYearChartData = (users) => {
+  const yearData = Array.from({ length: 12 }, (_, month) => ({
+    year: moment().year(), // Get the current year
+    month: moment().month(month).format("MMM"), // Short month name (Jan, Feb, ..., Dec)
+    count: 0,
+  }));
+
+  // Iterate through each user and increment the count for the corresponding month
+  users.forEach((user) => {
+    const createdAtMonth = moment(user.createdAt).month(); // Get the month index (0-11)
+    yearData[createdAtMonth].count++;
+  });
+
+  return yearData;
+};
+
 module.exports = {
   sendOrdersFullData,
   sendUsersFullData,
   sendItemsFullData,
   generateOrdersYearChartData,
+  generateUsersYearChartData,
 };

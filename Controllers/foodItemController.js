@@ -1,5 +1,6 @@
 const recipeModel = require("../Models/foodItemModel");
 const userModel = require("../Models/userModel");
+const ratingModel = require("../Models/ratingModel");
 const mongoose = require("mongoose");
 
 // create a food item
@@ -47,6 +48,49 @@ const getFoodItems = async (req, res) => {
   // const { _id } = req.user;
   try {
     const foodItems = await recipeModel.find().sort({ createdAt: -1 });
+    const ratings = await ratingModel.find().sort({ createdAt: -1 });
+    // Map ratings to a more usable structure for calculating averages
+    const ratingMap = new Map();
+
+    ratings.forEach((rating) => {
+      rating.ratings.forEach((ratingItem) => {
+        const productId = ratingItem.foodId.toString();
+        const ratingValue = ratingItem.value;
+
+        if (ratingMap.has(productId)) {
+          ratingMap.get(productId).push(ratingValue);
+        } else {
+          ratingMap.set(productId, [ratingValue]);
+        }
+      });
+    });
+
+    // console.log("asdfsadf",ratingMap);
+    // Calculate average rating for each food item
+    foodItems.forEach(async (foodItem) => {
+      const productId = foodItem._id.toString();
+
+      if (ratingMap.has(productId)) {
+        const ratings = ratingMap.get(productId);
+        // console.log(productId,ratings)
+        const averageRating =
+          ratings.reduce((acc, rating) => acc + rating, 0) / ratings.length;
+        foodItem.rating = averageRating.toFixed(1);
+
+        // Save updated foodItem back to the database
+        try {
+          await foodItem.save(); // Save the updated foodItem to MongoDB
+        } catch (error) {
+          console.error(
+            `Error saving food item ${foodItem._id} with average rating:`,
+            error
+          );
+        }
+      } else {
+        foodItem.rating = 0;
+      }
+    });
+
     return res.json({
       status: 200,
       messages: "Successfully fetched receipes",

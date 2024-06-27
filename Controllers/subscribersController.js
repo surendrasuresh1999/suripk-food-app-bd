@@ -11,6 +11,7 @@ const createNewSubscriber = async (req, res) => {
     await subScriberModel.create({
       email: req.body.email,
       name: req.body.name,
+      status: "active",
     });
     return res.json({
       status: true,

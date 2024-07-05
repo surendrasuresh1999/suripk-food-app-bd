@@ -140,7 +140,7 @@ const forgotPassword = async (req, res) => {
       },
       to: email,
       subject: "Reset Password Link",
-      text: `http://localhost:5173/reset-password-verify/${isUserExist._id}/${token}`,
+      text: `Click the following link to reset your password http://localhost:5173/reset-password-verify/${isUserExist._id}/${token}`,
     };
 
     transporter.sendMail(mailOptions, function (error, info) {
@@ -173,7 +173,7 @@ const updatePasswordVerification = async (req, res) => {
     if (decoded._id !== id) {
       return res.json({ status: false, message: "Invalid token" });
     }
-    
+
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     user.password = hashedPassword;

@@ -25,6 +25,6 @@ router.post("/login", loginUser);
 // forgot password route
 router.put("/reset-password", forgotPassword);
 
-router.put("/reset-password-verify", updatePasswordVerification);
+router.put("/reset-password-verify/:id/:token", updatePasswordVerification);
 
 module.exports = router;

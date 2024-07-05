@@ -110,11 +110,11 @@ const loginUser = async (req, res) => {
 
 const forgotPassword = async (req, res) => {
   const { email } = req.body;
-  console.log("email", email);
   try {
-    const isUserExist = User.findOne({ email: email });
+    const isUserExist = await User.findOne({ email: email });
+
     if (!isUserExist) {
-      return res.json({ status: 404, message: "Email does not exist" });
+      return res.json({ status: false, message: "Email does not exist" });
     }
 
     const token = jwt.sign({ id: isUserExist._id }, process.env.SECRET_STRING, {
@@ -123,30 +123,31 @@ const forgotPassword = async (req, res) => {
 
     const transporter = nodeMailer.createTransport({
       service: "gmail",
-      port: 587,
-      security: false,
       auth: {
-        user: process.env.USER,
+        user: process.env.USER_EMAIL,
         pass: process.env.PASSWORD,
+      },
+      secure: true,
+      tls: {
+        rejectUnauthorized: false,
       },
     });
 
     const mailOptions = {
       from: {
-        name: "Suri Restaurent",
-        address: process.env.USER,
+        name: "Suri restaurant",
+        address: process.env.USER_EMAIL,
       },
       to: email,
       subject: "Reset Password Link",
-      // text: `hello testing email`,
       text: `http://localhost:5173/reset-password-verify/${isUserExist._id}/${token}`,
     };
 
     transporter.sendMail(mailOptions, function (error, info) {
       if (error) {
-        console.log(error);
         return res.json({ status: false, message: "Error while sending mail" });
       } else {
+        // console.log(info);
         return res.json({
           status: true,
           message: "Reset password link send to provided email",
@@ -159,7 +160,25 @@ const forgotPassword = async (req, res) => {
 };
 
 const updatePasswordVerification = async (req, res) => {
+  const { id, token } = req.params;
+  const { password } = req.body;
   try {
+    const user = await User.findOne({ _id: id });
+
+    if (!user) {
+      return res.json({ status: false, message: "User not found" });
+    }
+
+    const decoded = jwt.verify(token, process.env.SECRET_STRING);
+    if (decoded.id !== id) {
+      return res.json({ status: false, message: "Invalid token" });
+    }
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    user.password = hashedPassword;
+    await user.save();
+
+    return res.json({ status: true, message: "Password updated successfully" });
   } catch (error) {
     return res.json({ status: 404, message: error.message });
   }

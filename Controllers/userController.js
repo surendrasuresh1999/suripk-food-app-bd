@@ -3,6 +3,7 @@ const cart = require("../Models/cartModel");
 const blogModel = require("../Models/blogModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const nodeMailer = require("nodemailer");
 
 const createJwtToken = (userId) => {
   return jwt.sign({ _id: userId }, process.env.SECRET_STRING, {
@@ -108,23 +109,59 @@ const loginUser = async (req, res) => {
 };
 
 const forgotPassword = async (req, res) => {
-  const { email, password, confirmPassword } = req.body;
-
+  const { email } = req.body;
+  console.log("email", email);
   try {
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.json({ status: false, message: "User doesn't exist" });
+    const isUserExist = User.findOne({ email: email });
+    if (!isUserExist) {
+      return res.json({ status: 404, message: "Email does not exist" });
     }
-    const hashedPassword = await bcrypt.hash(confirmPassword, 10);
 
-    user.password = hashedPassword;
-    await user.save();
-    return res.json({
-      status: true,
-      message: "Password updated successfully",
+    const token = jwt.sign({ id: isUserExist._id }, process.env.SECRET_STRING, {
+      expiresIn: "1d",
+    });
+
+    const transporter = nodeMailer.createTransport({
+      service: "gmail",
+      port: 587,
+      security: false,
+      auth: {
+        user: process.env.USER,
+        pass: process.env.PASSWORD,
+      },
+    });
+
+    const mailOptions = {
+      from: {
+        name: "Suri Restaurent",
+        address: process.env.USER,
+      },
+      to: email,
+      subject: "Reset Password Link",
+      // text: `hello testing email`,
+      text: `http://localhost:5173/reset-password-verify/${isUserExist._id}/${token}`,
+    };
+
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        console.log(error);
+        return res.json({ status: false, message: "Error while sending mail" });
+      } else {
+        return res.json({
+          status: true,
+          message: "Reset password link send to provided email",
+        });
+      }
     });
   } catch (error) {
-    return res.json({ status: false, message: error.message });
+    return res.json({ status: 404, message: error.message });
+  }
+};
+
+const updatePasswordVerification = async (req, res) => {
+  try {
+  } catch (error) {
+    return res.json({ status: 404, message: error.message });
   }
 };
 
@@ -134,4 +171,5 @@ module.exports = {
   loginUser,
   getUserInformation,
   forgotPassword,
+  updatePasswordVerification,
 };

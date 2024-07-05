@@ -5,6 +5,7 @@ const {
   loginUser,
   getUserInformation,
   forgotPassword,
+  updatePasswordVerification,
 } = require("../Controllers/userController");
 const requiredAuth = require("../Middleware/AuthmiddleWare");
 const router = express.Router();
@@ -22,6 +23,8 @@ router.post("/signup", createNewUser);
 router.post("/login", loginUser);
 
 // forgot password route
-router.put("/update-password", forgotPassword);
+router.put("/reset-password", forgotPassword);
+
+router.put("/reset-password-verify", updatePasswordVerification);
 
 module.exports = router;

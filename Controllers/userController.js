@@ -170,9 +170,10 @@ const updatePasswordVerification = async (req, res) => {
     }
 
     const decoded = jwt.verify(token, process.env.SECRET_STRING);
-    if (decoded.id !== id) {
+    if (decoded._id !== id) {
       return res.json({ status: false, message: "Invalid token" });
     }
+    
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     user.password = hashedPassword;

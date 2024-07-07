@@ -4,6 +4,7 @@ const orderModel = require("../Models/ordersModel");
 const userModel = require("../Models/userModel");
 const addressModel = require("../Models/addressModel");
 const cartModel = require("../Models/cartModel");
+const nodeMailer = require("nodemailer");
 
 const placingOrder = async (req, res) => {
   const instance = new Razorpay({
@@ -82,7 +83,40 @@ const paymentVerification = async (req, res) => {
 
     await userCart.save();
 
-    return res.json({ status: true, message: "Payment successful" });
+    const transporter = nodeMailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.USER_EMAIL,
+        pass: process.env.PASSWORD,
+      },
+      secure: true,
+      tls: {
+        rejectUnauthorized: false,
+      },
+    });
+
+    const mailOptions = {
+      from: {
+        name: user.name,
+        address: user.email,
+      },
+      to: process.env.USER_EMAIL,
+      subject: "New order received",
+      text: `Hello Admin,\n\nYou have received a new order.\n\nOrder Details:\n- Order ID: ${razorpay_order_id}\n- Order Items: ${items.length}\n- Total Amount: ${totalAmount/100}\n\nPlease login to the admin panel to view and manage the order.\n\nBest regards,\nSuri Restaurant Team`,
+    };
+
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        return res.json({ status: false, message: "Error while sending mail" });
+      } else {
+        // console.log(info);
+        return res.json({
+          status: true,
+          message: "Payment successful",
+        });
+      }
+    });
+
   } catch (error) {
     return res.json({ status: 400, message: error.message });
   }

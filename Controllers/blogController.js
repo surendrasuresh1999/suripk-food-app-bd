@@ -238,8 +238,8 @@ const createBlogPost = async (req, res) => {
     return res.json({
       status: true,
       message: "Blog created and emails sent successfully",
-      newBlog,
     });
+    
   } catch (error) {
     console.error("Error: ", error.message);
     return res.status(500).json({ status: false, message: error.message });

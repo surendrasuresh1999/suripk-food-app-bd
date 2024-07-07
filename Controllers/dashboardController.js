@@ -16,7 +16,7 @@ const getFullDashBoardData = async (req, res) => {
     const orders = await orderModel.find().sort({ createdAt: -1 });
     const users = await usersModel.find().sort({ createdAt: -1 });
     const items = await itemsModel.find().sort({ createdAt: -1 });
-
+// console.log(items)
     return res.json({
       status: true,
       message: "fetched dashboard data",

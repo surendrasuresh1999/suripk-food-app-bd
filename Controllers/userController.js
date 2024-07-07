@@ -15,7 +15,6 @@ const createJwtToken = (userId) => {
 const getAllUsers = async (req, res) => {
   try {
     const users = await User.find({}).sort({ createdAt: -1 });
-    console.log(users);
     if (users.length < 0) {
       return res.json({ error: "No users found", status: false });
     }

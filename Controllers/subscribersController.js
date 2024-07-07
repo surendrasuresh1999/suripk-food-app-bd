@@ -3,14 +3,15 @@ const userModel = require("../Models/userModel");
 
 const createNewSubscriber = async (req, res) => {
   const { _id } = req.user;
+  const { email, name } = req.body;
   try {
     const isUserExist = await userModel.findById({ _id: _id.toString() });
     if (!isUserExist) {
       return res.json({ status: false, message: "User does not exist" });
     }
     await subScriberModel.create({
-      email: req.body.email,
-      name: req.body.name,
+      email,
+      name,
       status: "active",
     });
     return res.json({

@@ -114,52 +114,11 @@ const sendUsersFullData = (users) => {
 };
 
 const sendItemsFullData = (items) => {
-  // Get current date
-  const currentDate = new Date();
-  // Get current month and year
-  const currentMonth = currentDate.getMonth() + 1; // getMonth() returns 0-based index
-  const currentYear = currentDate.getFullYear();
-
-  // Filter items created in the current month
-  const currentMonthItems = items.filter((item) => {
-    const createdAtDate = new Date(item.createdAt);
-    return (
-      createdAtDate.getMonth() + 1 === currentMonth &&
-      createdAtDate.getFullYear() === currentYear
-    );
-  });
-
-  // Total available food items in the current month
-  const totalAvailableItems = currentMonthItems.length;
-
-  // To calculate growth percentage, you would typically need historical data
-  // For demonstration purposes, let's assume previous month's count
-  const previousMonthItemsCount = 0; // Placeholder for previous month's count
-
-  // Calculate percentage growth
-  let percentageGrowth = 0;
-  if (previousMonthItemsCount !== 0) {
-    percentageGrowth =
-      ((totalAvailableItems - previousMonthItemsCount) /
-        previousMonthItemsCount) *
-      100;
-  } else {
-    // Handle division by zero or when no previous data is available
-    // This depends on your business logic or data availability
-    // For simplicity, if no previous data, growth is 100% (since it's from 0 to something)
-    if (totalAvailableItems > 0) {
-      percentageGrowth = 100;
-    }
-  }
-
-  // Prepare and return the data you want to send
   const dataToSend = {
-    total: totalAvailableItems,
-    percentage: percentageGrowth + "%",
-    // Any other data you may want to include
+    total: items.length,
+    percentage: 100 + "%",
   };
 
-  // Return or use the data as needed
   return dataToSend;
 };
 

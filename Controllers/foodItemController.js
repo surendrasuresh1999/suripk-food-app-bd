@@ -69,15 +69,19 @@ const createFoodItem = async (req, res) => {
     if (!isAdmin) {
       return res.json({ status: 404, message: "Admin not found" });
     }
+    const image = req.body.imageUrl;
+    // Replace 'http://' with 'https://'
+    const secureUrl = image.replace(/^http:\/\//i, "https://");
+
     const foodItem = await recipeModel.create({
-      // user: _id.toString(),
       ...req.body,
+      imageUrl: secureUrl,
     });
 
     res.json({
       message: "Food item created Successfully",
       foodItem,
-      status: 200,
+      status: true,
     });
   } catch (error) {
     console.log("Error: ", error.message);

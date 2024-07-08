@@ -118,9 +118,13 @@ const createBlogPost = async (req, res) => {
         message: "Sorry, you are not allowed to access this",
       });
     }
+    const image = req.body.imageUrl;
+    // Replace 'http://' with 'https://'
+    const secureUrl = image.replace(/^http:\/\//i, "https://");
     // Create the blog post
     const newBlog = await blogModel.create({
       ...req.body,
+      imageUrl: secureUrl,
     });
 
     // Fetch subscribers' emails from the database

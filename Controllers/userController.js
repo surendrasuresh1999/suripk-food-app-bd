@@ -187,7 +187,7 @@ const forgotPassword = async (req, res) => {
                   <td>
                     <p style="font-size:14px;line-height:1.5;margin:16px 0">Hi <!-- -->${isUserExist.name}<!-- -->,</p>
                     <p style="font-size:14px;line-height:1.5;margin:16px 0">You are trying to reset your password on Surendra Restaurant account</p>
-                    <p style="font-size:14px;line-height:1.5;margin:16px 0">Click the following link to reset your password <!-- --> http://localhost:5173/reset-password-verify/${isUserExist._id}/${token}</p>
+                    <p style="font-size:14px;line-height:1.5;margin:16px 0">Click the following link to reset your password <!-- --> https://suripk-food-app-fd.vercel.app/reset-password-verify/${isUserExist._id}/${token}</p>
                      <p style="font-size:14px;line-height:1.5;margin:16px 0px 4px 0px">Best regards,</p>
                       <p style="font-size:14px;line-height:1.5;margin:0px 0">Surendra parla kuruva</p>
                       <p style="font-size:14px;line-height:1.5;margin:0px 0">Restaurant owner</p>

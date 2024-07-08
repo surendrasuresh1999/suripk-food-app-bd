@@ -134,9 +134,9 @@ const createBlogPost = async (req, res) => {
         pass: process.env.PASSWORD,
       },
       secure: true,
-      tls: {
-        rejectUnauthorized: false,
-      },
+    //   tls: {
+    //     rejectUnauthorized: false,
+    //   },
     });
 
     // Prepare and send email to each subscriber

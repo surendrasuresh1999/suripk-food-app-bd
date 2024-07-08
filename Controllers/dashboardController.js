@@ -21,8 +21,10 @@ const getFullDashBoardData = async (req, res) => {
     const orders = await orderModel.find().sort({ createdAt: -1 });
     const users = await usersModel.find().sort({ createdAt: -1 });
     const items = await itemsModel.find().sort({ createdAt: -1 });
-    // const totalAmount = orders.reduce((order) => acc + order.totalAmount);
-    // console.log(totalAmount);
+    const totalAmount = orders.reduce(
+      (acc, order) => acc + order.totalAmount,
+      0
+    );
 
     return res.json({
       status: true,
@@ -31,6 +33,7 @@ const getFullDashBoardData = async (req, res) => {
         sendUsersFullData(users),
         sendOrdersFullData(orders),
         sendItemsFullData(items),
+        { total: totalAmount, percentage: "100%" },
       ],
       ordersChartData: generateOrdersYearChartData(orders),
       usersChartData: generateUsersYearChartData(users),

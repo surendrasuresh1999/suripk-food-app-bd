@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
-const User = require("../Models/userModel");
+const adminModel = require("../Models/adminModel");
 
-const verifyJwtToken = async (req, res, next) => {
+const verifyAdminJwtToken = async (req, res, next) => {
   const { authorization } = req.headers;
 
   if (!authorization) {
@@ -13,7 +13,7 @@ const verifyJwtToken = async (req, res, next) => {
   try {
     const { _id } = jwt.verify(token, process.env.SECRET_STRING);
     // If token is valid, attach user info to the request
-    req.user = await User.findOne({ _id }).select("_id");
+    req.user = await adminModel.findOne({ _id }).select("_id");
     // Proceed to the next middleware
     next();
   } catch (err) {
@@ -21,4 +21,4 @@ const verifyJwtToken = async (req, res, next) => {
   }
 };
 
-module.exports = verifyJwtToken;
+module.exports = verifyAdminJwtToken;

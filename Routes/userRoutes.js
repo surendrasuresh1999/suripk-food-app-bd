@@ -8,10 +8,11 @@ const {
   updatePasswordVerification,
 } = require("../Controllers/userController");
 const requiredAuth = require("../Middleware/AuthmiddleWare");
+const adminAuth = require("../Admin/AdminMiddleWare");
 const router = express.Router();
 
 // get all users route
-router.get("/all", getAllUsers);
+router.get("/all", adminAuth, getAllUsers);
 
 // get userinformation route
 router.get("/", requiredAuth, getUserInformation);

@@ -2,35 +2,24 @@ const express = require("express");
 
 const {
   getAllBlogPosts,
-  createBlogPost,
-  deleteBlogPost,
   getBlogPostById,
   dropLikeForPost,
-  updateBlogPost,
 } = require("../Controllers/blogController");
 
 const requiredAuth = require("../Middleware/AuthmiddleWare");
 
 const router = express.Router();
 
+// client routes
 router.use(requiredAuth);
 
 // GET all blog posts
 router.get("/", getAllBlogPosts);
 
-// create a new Blog post
-router.post("/", createBlogPost);
-
-// delete a Blog post
-router.delete("/:id", deleteBlogPost);
-
-// get blogPost by id
-router.get("/:id", getBlogPostById);
-
 // get blogPost by id
 router.put("/:id", dropLikeForPost);
 
 // get blogPost by id
-router.put("/update/:id", updateBlogPost);
+router.get("/:id", getBlogPostById);
 
 module.exports = router;

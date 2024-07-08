@@ -1,3 +1,4 @@
+const adminModel = require("../Models/adminModel");
 const servicesModel = require("../Models/servicesModel");
 
 const createService = async (req, res) => {
@@ -31,4 +32,26 @@ const getAllUserService = async (req, res) => {
   }
 };
 
-module.exports = { createService, getAllUserService };
+const getAllUserServicesAdmin = async (req, res) => {
+  const { _id } = req.user;
+  try {
+    const isAdminExist = await adminModel.findOne({ _id: _id.toString() });
+
+    if (!isAdminExist) {
+      return res.json({
+        status: 404,
+        message: "Sorry, you are not allowed to access this",
+      });
+    }
+    const services = await servicesModel.find();
+    return res.json({
+      status: true,
+      services,
+      message: "Fetching all user services",
+    });
+  } catch (error) {
+    return res.json({ status: 404, message: error.message });
+  }
+};
+
+module.exports = { createService, getAllUserService, getAllUserServicesAdmin };

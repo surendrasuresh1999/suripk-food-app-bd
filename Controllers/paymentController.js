@@ -102,7 +102,11 @@ const paymentVerification = async (req, res) => {
       },
       to: process.env.USER_EMAIL,
       subject: "New order received",
-      text: `Hello Admin,\n\nYou have received a new order.\n\nOrder Details:\n- Order ID: ${razorpay_order_id}\n- Order Items: ${items.length}\n- Total Amount: ${totalAmount/100}\n\nPlease login to the admin panel to view and manage the order.\n\nBest regards,\nSuri Restaurant Team`,
+      text: `Hello Admin,\n\nYou have received a new order.\n\nOrder Details:\n- Order ID: ${razorpay_order_id}\n- Order Items: ${
+        items.length
+      }\n- Total Amount: ${
+        totalAmount / 100
+      }\n\nPlease login to the admin panel to view and manage the order.\n\nBest regards,\nSurendra Restaurant Team`,
     };
 
     transporter.sendMail(mailOptions, function (error, info) {
@@ -116,7 +120,6 @@ const paymentVerification = async (req, res) => {
         });
       }
     });
-
   } catch (error) {
     return res.json({ status: 400, message: error.message });
   }

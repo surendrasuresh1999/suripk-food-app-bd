@@ -1,3 +1,4 @@
+const adminModel = require("../Models/adminModel");
 const subScriberModel = require("../Models/subscriberModel");
 const userModel = require("../Models/userModel");
 
@@ -24,8 +25,16 @@ const createNewSubscriber = async (req, res) => {
 };
 
 const getAllSubscribers = async (req, res) => {
-  // const { _id } = req.user;
+  const { _id } = req.user;
   try {
+    const isAdminExist = await adminModel.find({ _id: _id.toString() });
+
+    if (!isAdminExist) {
+      return res.json({
+        status: 404,
+        message: "Sorry, you are not allowed to access this",
+      });
+    }
     const subscribers = await subScriberModel.find();
     return res.json({
       status: true,

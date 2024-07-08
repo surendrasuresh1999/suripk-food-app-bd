@@ -2,6 +2,7 @@ const user = require("../Models/userModel");
 const orderModel = require("../Models/ordersModel");
 const recipeModel = require("../Models/foodItemModel");
 const ratingModel = require("../Models/ratingModel");
+const adminModel = require("../Models/adminModel");
 
 const getUserAllOrders = async (req, res) => {
   const { _id } = req.user;
@@ -28,6 +29,27 @@ const getUserAllOrders = async (req, res) => {
     return res.json({ status: true, orders });
   } catch (error) {
     return res.json({ status: 401, message: error.message });
+  }
+};
+
+const getAllOrders = async (req, res) => {
+  const { _id } = req.user;
+  // console.log("user id", req.user);
+  try {
+    const isAdminExist = await adminModel.findOne({ _id: _id.toString() });
+
+    if (!isAdminExist) {
+      return res.json({
+        status: 404,
+        message: "Sorry, you are not allowed to access this",
+      });
+    }
+
+    const orders = await orderModel.find().sort({ createdAt: -1 });
+
+    return res.json({ status: true, orders });
+  } catch (error) {
+    return res.json({ status: 400, message: error.message });
   }
 };
 
@@ -110,4 +132,9 @@ const dropRatingForFoodItem = async (req, res) => {
   }
 };
 
-module.exports = { getUserAllOrders, updateOrder, dropRatingForFoodItem };
+module.exports = {
+  getUserAllOrders,
+  updateOrder,
+  dropRatingForFoodItem,
+  getAllOrders,
+};

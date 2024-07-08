@@ -5,6 +5,7 @@ const cors = require("cors");
 
 const foodRoute = require("./Routes/foodRoutes");
 const blogRoute = require("./Routes/blogRoutes");
+const adminBlogRoute = require("./Routes/adminBlogRoutes");
 const userRoute = require("./Routes/userRoutes");
 const cartRoute = require("./Routes/cartRoutes");
 const subscribeRoute = require("./Routes/subScribeRoutes");
@@ -32,6 +33,7 @@ app.use((req, res, next) => {
 // define all routes here
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/food", foodRoute);
+app.use("/api/blog/admin", adminBlogRoute);
 app.use("/api/blog", blogRoute);
 app.use("/api/user", userRoute);
 app.use("/api/admin", adminRoutes);

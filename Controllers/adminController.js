@@ -99,7 +99,7 @@ const forgotPasswordAdmin = async (req, res) => {
 
     const mailOptions = {
       from: {
-        name: "Suri restaurant",
+        name: "Surendra restaurant",
         address: process.env.USER_EMAIL,
       },
       to: email,

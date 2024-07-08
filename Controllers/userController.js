@@ -158,7 +158,7 @@ const forgotPassword = async (req, res) => {
                 <tr style="width:100%; display: flex; justify-content: center; align-items: center;">
                   <td style="width:100%;">
                   <div style="width: 100%; position: relative; display: flex; justify-content: center;">
-                    <img src="https://res.cloudinary.com/dplj90agk/image/upload/v1720330332/c2bdf776-a362-4ee1-afcb-cdcdcaf82113_iqtd7t.jpg" style="display: block; outline: none; border: none; text-decoration: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0; margin: auto; max-width: 100%;" width="100" />
+                    <img src="https://res.cloudinary.com/dplj90agk/image/upload/v1720418977/suri3_2x_xoyhrt.png" style="display: block; outline: none; border: none; text-decoration: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0; margin: auto; max-width: 100%;" width="100" />
                   </div>
                   </td>
                 </tr>

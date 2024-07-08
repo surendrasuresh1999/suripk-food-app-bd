@@ -1,26 +1,6 @@
 const recipeModel = require("../Models/foodItemModel");
 const ratingModel = require("../Models/ratingModel");
-const mongoose = require("mongoose");
 const adminModel = require("../Models/adminModel");
-
-// delete a food item
-const deleteFoodItem = async (req, res) => {
-  try {
-    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-      return res.json({ staus: 401, error: "Invalid food item ID" });
-    }
-    const isRecepieExist = await recipeModel.findById(req.params.id);
-
-    if (!isRecepieExist) {
-      return res.json({ status: 404, message: "Food item not found" });
-    }
-
-    await recipeModel.findByIdAndDelete(req.params.id);
-    return res.json({ status: true, message: "Food item deleted" });
-  } catch (error) {
-    return res.json({ status: 401, message: error.message });
-  }
-};
 
 // fetch all food items
 const getFoodItems = async (req, res) => {
@@ -79,6 +59,7 @@ const getFoodItems = async (req, res) => {
   }
 };
 
+// admin routes
 // create a food item
 const createFoodItem = async (req, res) => {
   const { _id } = req.user;
@@ -169,6 +150,10 @@ const getAllFoodItems = async (req, res) => {
 const updateFoodItem = async (req, res) => {
   const { _id } = req.user;
   try {
+    const isAdmin = await adminModel.findOne({ _id: _id.toString() });
+    if (!isAdmin) {
+      return res.json({ status: 404, message: "Admin not found" });
+    }
     isFoodExist = await recipeModel.findById(req.params.id);
     if (!isFoodExist) {
       return res.json({ status: 404, message: "food item not found" });
@@ -180,6 +165,27 @@ const updateFoodItem = async (req, res) => {
     });
   } catch (error) {
     return res.json({ status: 404, message: error.message });
+  }
+};
+
+// delete a food item
+const deleteFoodItem = async (req, res) => {
+  const { _id } = req.user;
+  try {
+    const isAdmin = await adminModel.findOne({ _id: _id.toString() });
+    if (!isAdmin) {
+      return res.json({ status: 404, message: "Admin not found" });
+    }
+    const isRecepieExist = await recipeModel.findById(req.params.id);
+
+    if (!isRecepieExist) {
+      return res.json({ status: 404, message: "Food item not found" });
+    }
+
+    await recipeModel.findByIdAndDelete(req.params.id);
+    return res.json({ status: true, message: "Food item deleted" });
+  } catch (error) {
+    return res.json({ status: 401, message: error.message });
   }
 };
 

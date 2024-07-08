@@ -1,29 +1,7 @@
 const recipeModel = require("../Models/foodItemModel");
-const userModel = require("../Models/userModel");
 const ratingModel = require("../Models/ratingModel");
 const mongoose = require("mongoose");
 const adminModel = require("../Models/adminModel");
-
-// create a food item
-const createFoodItem = async (req, res) => {
-  // const { _id } = req.user;
-  // console.log(req.body);
-  try {
-    const foodItem = await recipeModel.create({
-      // user: _id.toString(),
-      ...req.body,
-    });
-
-    res.json({
-      message: "Food item created Successfully",
-      foodItem,
-      status: 200,
-    });
-  } catch (error) {
-    console.log("Error: ", error.message);
-    res.json({ status: 400, message: error.message });
-  }
-};
 
 // delete a food item
 const deleteFoodItem = async (req, res) => {
@@ -46,7 +24,6 @@ const deleteFoodItem = async (req, res) => {
 
 // fetch all food items
 const getFoodItems = async (req, res) => {
-  const { _id } = req.user;
   try {
     const foodItems = await recipeModel.find().sort({ createdAt: -1 });
     const ratings = await ratingModel.find().sort({ createdAt: -1 });
@@ -99,6 +76,31 @@ const getFoodItems = async (req, res) => {
     });
   } catch (error) {
     return res.json({ status: 401, messages: error.messages });
+  }
+};
+
+// create a food item
+const createFoodItem = async (req, res) => {
+  const { _id } = req.user;
+  // console.log(req.body);
+  try {
+    const isAdmin = await adminModel.findOne({ _id: _id.toString() });
+    if (!isAdmin) {
+      return res.json({ status: 404, message: "Admin not found" });
+    }
+    const foodItem = await recipeModel.create({
+      // user: _id.toString(),
+      ...req.body,
+    });
+
+    res.json({
+      message: "Food item created Successfully",
+      foodItem,
+      status: 200,
+    });
+  } catch (error) {
+    console.log("Error: ", error.message);
+    res.json({ status: 400, message: error.message });
   }
 };
 

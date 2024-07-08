@@ -10,7 +10,7 @@ const {
   updatePasswordVerificationAdmin,
 } = require("../Controllers/adminController");
 
-router.use(requireAuth);
+// router.use(requireAuth);
 
 router.post("/signup", signupAdmin);
 

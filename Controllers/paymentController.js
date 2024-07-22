@@ -90,9 +90,9 @@ const paymentVerification = async (req, res) => {
         pass: process.env.PASSWORD,
       },
       secure: true,
-      // tls: {
-      //   rejectUnauthorized: false,
-      // },
+      tls: {
+        rejectUnauthorized: false,
+      },
     });
 
     const mailOptions = {

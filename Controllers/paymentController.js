@@ -109,16 +109,20 @@ const paymentVerification = async (req, res) => {
       }\n\nPlease login to the admin panel to view and manage the order.\n\nBest regards,\nSurendra Restaurant Team`,
     };
 
-    transporter.sendMail(mailOptions, function (error, info) {
-      if (error) {
-        return res.json({ status: false, message: "Error while sending mail" });
-      } else {
-        // console.log(info);
-        return res.json({
-          status: true,
-          message: "Payment successful",
-        });
-      }
+    // transporter.sendMail(mailOptions, function (error, info) {
+    //   if (error) {
+    //     return res.json({ status: false, message: "Error while sending mail" });
+    //   } else {
+    //     // console.log(info);
+    //     return res.json({
+    //       status: true,
+    //       message: "Payment successful",
+    //     });
+    //   }
+    // });
+    return res.json({
+      status: true,
+      message: "Payment successful",
     });
   } catch (error) {
     return res.json({ status: 400, message: error.message });

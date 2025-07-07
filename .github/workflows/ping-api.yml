@@ -1,0 +1,14 @@
+name: Keep MongoDB Awake
+
+on:
+  schedule:
+    - cron: '0 0 */2 * *'  # Runs every 2 days at 00:00 UTC
+  workflow_dispatch:       
+
+jobs:
+  ping-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send ping to backend
+        run: |
+          curl -s https://suri-food-app-api.onrender.com/api/dashboard
